@@ -16,7 +16,6 @@ def user_login(request):
                 return HttpResponseRedirect('/users/')
             else:
                 return HttpResponse("invalid credentials")
-
     else:
         form = LoginForm()
     return render(request,'users/login.html',{'form':form})
