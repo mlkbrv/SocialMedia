@@ -2,8 +2,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
+
+from posts.models import Post
 from .forms import *
 from .models import Profile
+
+
 def user_login(request):
     if request.method == "POST":
         form = LoginForm(request.POST)
@@ -18,15 +22,20 @@ def user_login(request):
                 return HttpResponse("invalid credentials")
     else:
         form = LoginForm()
-    return render(request,'users/login.html',{'form':form})
+    return render(request, 'users/login.html', {'form': form})
+
 
 @login_required
 def index(request):
-    return render(request,'users/index.html')
+    current = request.user
+    posts = Post.objects.filter(user=current).order_by('-created_at')
+    return render(request, 'users/index.html', {'posts': posts})
+
 
 def user_logout(request):
     logout(request)
     return render(request, 'users/logout.html')
+
 
 def register(request):
     if request.method == "POST":
@@ -39,13 +48,14 @@ def register(request):
             return redirect('login')
     else:
         form = RegisterForm()
-    return render(request,'users/register.html',{'form':form})
+    return render(request, 'users/register.html', {'form': form})
+
 
 @login_required
 def edit(request):
     if request.method == "POST":
-        user_form = UserEditForm(instance=request.user, data=request.POST,files=request.FILES)
-        profile_form = ProfileEditForm(instance=request.user.profile, data=request.POST,files=request.FILES)
+        user_form = UserEditForm(instance=request.user, data=request.POST, files=request.FILES)
+        profile_form = ProfileEditForm(instance=request.user.profile, data=request.POST, files=request.FILES)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
@@ -53,4 +63,4 @@ def edit(request):
         user_form = UserEditForm(instance=request.user)
         profile_form = ProfileEditForm(instance=request.user.profile)
 
-    return render(request,'users/edit.hmtl',{'user_form':user_form,'profile_form':profile_form})
+    return render(request, 'users/edit.hmtl', {'user_form': user_form, 'profile_form': profile_form})

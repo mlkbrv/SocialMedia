@@ -1,4 +1,9 @@
 {% extends 'users/base.html' %}
 {% block body %}
     <h1>Welcome</h1>
+    {% for post in posts %}
+    <h1>{{post.title}}</h1>
+    <p>{{post.user}}</p>
+        <img src="{{post.image.url}}" alt="{{post.title}}">
+    {% endfor %}
 {% endblock %}

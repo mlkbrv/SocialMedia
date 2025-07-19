@@ -6,7 +6,7 @@ from .models import *
 @login_required
 def create_post(request):
     if request.method == "POST":
-        form = PostCreateForm(data=request.POST)
+        form = PostCreateForm(data=request.POST,files=request.FILES)
         if form.is_valid():
             new_post = form.save(commit=False)
             new_post.user = request.user
