@@ -63,4 +63,4 @@ def edit(request):
         user_form = UserEditForm(instance=request.user)
         profile_form = ProfileEditForm(instance=request.user.profile)
 
-    return render(request, 'users/edit.hmtl', {'user_form': user_form, 'profile_form': profile_form})
+    return render(request, 'users/edit.html', {'user_form': user_form, 'profile_form': profile_form})

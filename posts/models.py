@@ -11,7 +11,7 @@ class Post(models.Model):
     image = models.ImageField(upload_to='posts/',blank=True,null=True)
     slug = models.SlugField(max_length=100,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-
+    liked_by = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='posts_liked', blank=True)
     def __str__(self):
         return self.title
 
